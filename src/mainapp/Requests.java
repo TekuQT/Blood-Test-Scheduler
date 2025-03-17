@@ -68,18 +68,24 @@ public class Requests {
     }
     //to display requests in order
     //and if there is no requests it will diplay a different message
-    public static void displayRequestsToStringBuilder(StringBuilder sb) {
-        //if there is no data it will show this message
-        if (head == null) {
-        sb.append("No blood test requests.");
+    public static void displayRequestsRecursive(Requests current, StringBuilder sb) {
+        // if the current node is null, stop recursion
+        if (current == null) {
             return;
         }
-        //if not 
-        Requests current = head;
-        while (current != null) {
-            sb.append(current.toString()).append("\n");
-            current = current.next;
+
+        // process the current node
+        sb.append(current.toString()).append("\n");
+
+        // recursively call for the next node
+        displayRequestsRecursive(current.getNext(), sb);
+    }
+    public static void displayRequestsToStringBuilder(StringBuilder sb) {
+        if (head == null) {
+            sb.append("No blood test requests.");
+            return;
         }
+        displayRequestsRecursive(head, sb); // start recursion from the head
     }
     public static boolean removeRequest(Requests requestToRemove) {
         if (head == null || requestToRemove == null) {
