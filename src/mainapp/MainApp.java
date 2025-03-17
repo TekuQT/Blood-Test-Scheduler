@@ -6,7 +6,7 @@ package mainapp;
 
 /**
  *
- * @author tekuboii
+ * @author temuulen
  */
 public class MainApp {
 

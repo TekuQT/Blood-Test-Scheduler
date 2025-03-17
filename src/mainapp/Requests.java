@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 /**
  *
- * @author tekuboii
+ * @author temuulen
  */
 public class Requests {
     //data members
@@ -67,13 +67,14 @@ public class Requests {
         }
     }
     //to display requests in order
-    //And if there is no requests it will diplay a different message
+    //and if there is no requests it will diplay a different message
     public static void displayRequestsToStringBuilder(StringBuilder sb) {
+        //if there is no data it will show this message
         if (head == null) {
         sb.append("No blood test requests.");
             return;
         }
-
+        //if not 
         Requests current = head;
         while (current != null) {
             sb.append(current.toString()).append("\n");
@@ -85,19 +86,19 @@ public class Requests {
             return false;
         }
 
-        // If head is the one to remove
+        // if head is the one to remove
         if (head == requestToRemove) {
             head = head.next;
             return true;
         }
 
-        // Search for the request in the list
+        // search for the request in the list
         Requests current = head;
         while (current.next != null && current.next != requestToRemove) {
             current = current.next;
         }
 
-        // If found, remove it
+        // if found, remove it
         if (current.next == requestToRemove) {
             current.next = requestToRemove.next;
             return true;
@@ -106,15 +107,20 @@ public class Requests {
         return false;
     }
 
-    // Static list for absent patients
+    // static list for absent patients
     private static Requests absentHead = null;
 
+    private static final int MAX_ABSENT_HISTORY = 5; // Only keep track of the last 5 absences
+    private static Requests[] absentStack = new Requests[MAX_ABSENT_HISTORY];
+    private static int absentStackTop = -1; // Initialize stack pointer
+
+    //a absent list that implements STACK
     public static void addToAbsentList(Requests request) {
         if (request == null) {
             return;
         }
 
-        // Create a copy of the request
+        // create a copy of the request
         Requests absentRequest = new Requests(
             request.getName(), 
             request.getAge(), 
@@ -123,19 +129,21 @@ public class Requests {
             request.getGpDetails()
         );
 
-        // Add to absent list
-        if (absentHead == null) {
-            absentHead = absentRequest;
-        } else {
-            Requests current = absentHead;
-            while (current.next != null) {
-                current = current.next;
+        // if the stack is full, shift everything down to make room
+        if (absentStackTop == MAX_ABSENT_HISTORY - 1) {
+            // Remove oldest entry
+            for (int i = 0; i < MAX_ABSENT_HISTORY - 1; i++) {
+                absentStack[i] = absentStack[i + 1];
             }
-            current.next = absentRequest;
-        }
+            absentStackTop--; // Decrease top since we removed one
         }
 
-    public static void displayAbsentRequests() {
+        // push new entry onto the stack
+        absentStackTop++;
+        absentStack[absentStackTop] = absentRequest;
+    }
+        //to show the absent patients
+        public static void displayAbsentRequests() {
         if (absentHead == null) {
             System.out.println("No absent patients.");
             return;
@@ -147,20 +155,19 @@ public class Requests {
             current = current.next;
         }
     }
-
+    
     public static String getAbsentRequestsAsString() {
         StringBuilder sb = new StringBuilder();
 
-        if (absentHead == null) {
+        if (absentStackTop == -1) {
             return "No absent patients.";
         }
 
-        Requests current = absentHead;
-        while (current != null) {
-            sb.append(current.toString()).append("\n");
-            current = current.next;
-        }
-
+       // show most recent absences first (stack order - LIFO)
+        for (int i = absentStackTop; i >= 0; i--) {
+            sb.append(absentStack[i].toString()).append("\n");
+       }
+    
         return sb.toString();
     }   
     @Override

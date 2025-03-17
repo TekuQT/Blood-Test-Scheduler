@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package mainapp;
-
+/**
+ *
+ * @author temuulen
+ */
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
