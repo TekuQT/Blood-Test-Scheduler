@@ -16,10 +16,6 @@ public class MainGUI extends javax.swing.JFrame {
     public MainGUI() {
         
         initComponents();
-        RequestTestPNL.setVisible(false);
-        AbsentListPNL.setVisible(false);
-        NextPatientPNL.setVisible(false);
-        ViewListPNL.setVisible(false);
     }
     
     /**
@@ -136,6 +132,11 @@ public class MainGUI extends javax.swing.JFrame {
         gpDetailsLBL.setText("Gp Detail");
 
         InfoBTN.setText("?");
+        InfoBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InfoBTNActionPerformed(evt);
+            }
+        });
 
         SubmitBTN.setText("Submit");
         SubmitBTN.addActionListener(new java.awt.event.ActionListener() {
@@ -350,7 +351,21 @@ public class MainGUI extends javax.swing.JFrame {
 
         javax.swing.JOptionPane.showMessageDialog(this, "Blood test request submitted.");
     }//GEN-LAST:event_SubmitBTNActionPerformed
-
+    
+    
+    private void InfoBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InfoBTNActionPerformed
+         String infoMessage = "Priority Levels:\n\n" +
+                         "High - Urgent cases requiring immediate attention\n" +
+                         "Medium - Standard cases with normal processing time\n" +
+                         "Low - Non-urgent cases that can be processed when resources are available";
+    
+        javax.swing.JOptionPane.showMessageDialog(this, 
+                                             infoMessage,
+                                             "Priority Information", 
+                                             javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_InfoBTNActionPerformed
+    
+    
     /**
      * @param args the command line arguments
      */
