@@ -109,10 +109,10 @@ public class Requests {
 
     // static list for absent patients
     private static Requests absentHead = null;
-
-    private static final int MAX_ABSENT_HISTORY = 5; // Only keep track of the last 5 absences
-    private static Requests[] absentStack = new Requests[MAX_ABSENT_HISTORY];
-    private static int absentStackTop = -1; // Initialize stack pointer
+    
+    //only top 5 missing people is saved
+    private static Requests[] absentStack = new Requests[5];
+    private static int absentStackTop = -1;
 
     //a absent list that implements STACK
     public static void addToAbsentList(Requests request) {
@@ -130,12 +130,12 @@ public class Requests {
         );
 
         // if the stack is full, shift everything down to make room
-        if (absentStackTop == MAX_ABSENT_HISTORY - 1) {
+        if (absentStackTop == 5 - 1) {
             // Remove oldest entry
-            for (int i = 0; i < MAX_ABSENT_HISTORY - 1; i++) {
+            for (int i = 0; i < 5 - 1; i++) {
                 absentStack[i] = absentStack[i + 1];
             }
-            absentStackTop--; // Decrease top since we removed one
+            absentStackTop--; // decrease top since we removed one
         }
 
         // push new entry onto the stack
