@@ -4,14 +4,12 @@
  */
 package mainapp;
 
-import javax.swing.JPanel;
-
 /**
  *
  * @author tekuboii
  */
 public class MainGUI extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form MainGUI
      */
@@ -140,6 +138,11 @@ public class MainGUI extends javax.swing.JFrame {
         InfoBTN.setText("?");
 
         SubmitBTN.setText("Submit");
+        SubmitBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubmitBTNActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout RequestTestPNLLayout = new javax.swing.GroupLayout(RequestTestPNL);
         RequestTestPNL.setLayout(RequestTestPNLLayout);
@@ -305,6 +308,11 @@ public class MainGUI extends javax.swing.JFrame {
     private void ViewListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewListBTNActionPerformed
         BackgroundPNL.removeAll();
         BackgroundPNL.add(ViewListPNL);
+        
+        StringBuilder sb = new StringBuilder();
+        Requests.displayRequestsToStringBuilder(sb);
+        ViewListTA.setText(sb.toString());
+        
         BackgroundPNL.repaint();
         BackgroundPNL.revalidate();
     }//GEN-LAST:event_ViewListBTNActionPerformed
@@ -315,6 +323,33 @@ public class MainGUI extends javax.swing.JFrame {
         BackgroundPNL.repaint();
         BackgroundPNL.revalidate();
     }//GEN-LAST:event_AbsentListBTNActionPerformed
+
+    private void SubmitBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitBTNActionPerformed
+        String name = NameTF.getText();
+        int age;
+        try {
+            age = Integer.parseInt(AgeTF.getText());
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please enter a valid age.");
+            return;
+        }
+
+        String priority = PriorityTF.getText();
+        boolean isPatient = PatientTF.getText().equalsIgnoreCase("Yes");
+        String gpDetails = gpDetailsTF.getText();
+
+        // Add the request to the list
+        Requests.addRequest(name, age, priority, isPatient, gpDetails);
+
+        // Clear the fields
+        NameTF.setText("");
+        AgeTF.setText("");
+        PriorityTF.setText("");
+        PatientTF.setText("");
+        gpDetailsTF.setText("");
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Blood test request submitted.");
+    }//GEN-LAST:event_SubmitBTNActionPerformed
 
     /**
      * @param args the command line arguments

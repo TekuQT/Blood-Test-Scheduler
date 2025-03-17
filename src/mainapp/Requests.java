@@ -4,6 +4,8 @@
  */
 package mainapp;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author tekuboii
@@ -44,14 +46,15 @@ public class Requests {
         }
         //to display requests in order
         //And if there is no requests it will diplay a different message
-        public static void displayRequests() {
+        public static void displayRequestsToStringBuilder(StringBuilder sb) {
             if (head == null) {
-                System.out.println("No blood test requests.");
+            sb.append("No blood test requests.");
                 return;
             }
+    
             Requests current = head;
             while (current != null) {
-                System.out.println(current);
+                sb.append(current.toString()).append("\n");
                 current = current.next;
             }
         }
