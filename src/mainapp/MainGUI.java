@@ -229,8 +229,18 @@ public class MainGUI extends javax.swing.JFrame {
         BackgroundPNL.add(ViewListPNL, "card3");
 
         TestTakenBTN.setText("Test Taken");
+        TestTakenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TestTakenBTNActionPerformed(evt);
+            }
+        });
 
         MissingBTN.setText("Missing");
+        MissingBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MissingBTNActionPerformed(evt);
+            }
+        });
 
         PatientDetailTA.setColumns(20);
         PatientDetailTA.setRows(5);
@@ -241,21 +251,21 @@ public class MainGUI extends javax.swing.JFrame {
         NextPatientPNLLayout.setHorizontalGroup(
             NextPatientPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(NextPatientPNLLayout.createSequentialGroup()
-                .addGap(108, 108, 108)
+                .addGap(68, 68, 68)
                 .addGroup(NextPatientPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(NextPatientPNLLayout.createSequentialGroup()
                         .addComponent(TestTakenBTN)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(MissingBTN))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(120, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         NextPatientPNLLayout.setVerticalGroup(
             NextPatientPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NextPatientPNLLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(NextPatientPNLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TestTakenBTN)
                     .addComponent(MissingBTN))
@@ -302,6 +312,17 @@ public class MainGUI extends javax.swing.JFrame {
     private void NextPatientBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextPatientBTNActionPerformed
         BackgroundPNL.removeAll();
         BackgroundPNL.add(NextPatientPNL);
+        Requests headRequest = Requests.getHead(); // You'll need to add a static getter for head
+    
+        // Get the highest priority request
+        Requests nextPatient = Patient.getHighestPriorityRequest(headRequest);
+
+        // Display the patient details
+        if (nextPatient != null) {
+            PatientDetailTA.setText(nextPatient.toString());
+        } else {
+            PatientDetailTA.setText("No pending blood test requests.");
+        }
         BackgroundPNL.repaint();
         BackgroundPNL.revalidate();
     }//GEN-LAST:event_NextPatientBTNActionPerformed
@@ -321,6 +342,9 @@ public class MainGUI extends javax.swing.JFrame {
     private void AbsentListBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbsentListBTNActionPerformed
         BackgroundPNL.removeAll();
         BackgroundPNL.add(AbsentListPNL);
+        
+        AbsentListTA.setText(Requests.getAbsentRequestsAsString());
+        
         BackgroundPNL.repaint();
         BackgroundPNL.revalidate();
     }//GEN-LAST:event_AbsentListBTNActionPerformed
@@ -364,6 +388,44 @@ public class MainGUI extends javax.swing.JFrame {
                                              "Priority Information", 
                                              javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_InfoBTNActionPerformed
+
+    private void TestTakenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TestTakenBTNActionPerformed
+        // Get the highest priority patient
+        Requests highestPriorityRequest = Patient.getHighestPriorityRequest(Requests.getHead());
+
+        if (highestPriorityRequest != null) {
+            // Remove the request from the list
+            Requests.removeRequest(highestPriorityRequest);
+
+            // Update the display
+            Requests nextPatient = Patient.getHighestPriorityRequest(Requests.getHead());
+            if (nextPatient != null) {
+                PatientDetailTA.setText(nextPatient.toString());
+            } else {
+                PatientDetailTA.setText("No more pending blood test requests.");
+            }
+        }
+    }//GEN-LAST:event_TestTakenBTNActionPerformed
+
+    private void MissingBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MissingBTNActionPerformed
+        Requests highestPriorityRequest = Patient.getHighestPriorityRequest(Requests.getHead());
+    
+        if (highestPriorityRequest != null) {
+            // Add to absent list
+            Requests.addToAbsentList(highestPriorityRequest);
+
+            // Remove from main list
+            Requests.removeRequest(highestPriorityRequest);
+
+            // Update the display
+            Requests nextPatient = Patient.getHighestPriorityRequest(Requests.getHead());
+            if (nextPatient != null) {
+                PatientDetailTA.setText(nextPatient.toString());
+            } else {
+                PatientDetailTA.setText("No more pending blood test requests.");
+            }
+        }
+    }//GEN-LAST:event_MissingBTNActionPerformed
     
     
     /**
